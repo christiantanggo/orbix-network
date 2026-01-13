@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description: 'Admin dashboard for Orbix Network',
 }
 
+export const dynamic = 'force-dynamic'
+
 export default function RootLayout({
   children,
 }: {
