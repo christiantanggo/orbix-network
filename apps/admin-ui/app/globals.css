@@ -26,3 +26,19 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+/* Force input text to always be dark */
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="number"],
+textarea {
+  color: #111827 !important;
+  background-color: #ffffff !important;
+}
+
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="text"]::placeholder {
+  color: #9ca3af !important;
+}
+
