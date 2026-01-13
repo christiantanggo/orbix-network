@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
@@ -11,21 +11,70 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  // Check Supabase configuration on mount
+  useEffect(() => {
+    // Try to access Supabase URL from the client
+    // If it's not configured, the URL will be empty
+    const testConnection = async () => {
+      try {
+        const { data, error } = await supabase.auth.getSession()
+        // If we get an error about missing URL/key, it's a config issue
+        if (error && (error.message.includes('Invalid API key') || error.message.includes('Invalid URL'))) {
+          setError('⚠️ Supabase is not properly configured. Please check your Vercel environment variables (NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY).')
+        }
+      } catch (err: any) {
+        // Connection errors might indicate missing config
+        if (err.message && (err.message.includes('fetch') || err.message.includes('Failed to fetch'))) {
+          setError('⚠️ Cannot connect to Supabase. Please verify your NEXT_PUBLIC_SUPABASE_URL is correct.')
+        }
+      }
+    }
+    testConnection()
+  }, [])
+
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError('')
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+    // Check if Supabase is configured
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-    if (error) {
-      setError(error.message)
+    if (!supabaseUrl || !supabaseKey) {
+      setError('Supabase is not configured. Please check environment variables.')
       setLoading(false)
-    } else {
-      router.push('/dashboard')
+      return
+    }
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (error) {
+        // Provide more helpful error messages
+        if (error.message.includes('Invalid login credentials')) {
+          setError('Invalid email or password. Please check your credentials.')
+        } else if (error.message.includes('Email not confirmed')) {
+          setError('Please confirm your email before logging in.')
+        } else if (error.message.includes('Too many requests')) {
+          setError('Too many login attempts. Please try again later.')
+        } else {
+          setError(error.message || 'An error occurred during login. Please check your Supabase configuration.')
+        }
+        setLoading(false)
+      } else if (data?.user) {
+        router.push('/dashboard')
+      } else {
+        setError('Login failed. Please try again.')
+        setLoading(false)
+      }
+    } catch (err: any) {
+      console.error('Login error:', err)
+      setError(err.message || 'An unexpected error occurred. Please check your network connection and Supabase configuration.')
+      setLoading(false)
     }
   }
 
