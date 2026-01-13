@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
@@ -10,6 +10,34 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    // Force text color after component mounts
+    const forceTextColor = () => {
+      const emailInput = document.getElementById('email') as HTMLInputElement
+      const passwordInput = document.getElementById('password') as HTMLInputElement
+      
+      if (emailInput) {
+        emailInput.style.color = '#111827'
+        emailInput.style.backgroundColor = '#ffffff'
+        emailInput.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
+        emailInput.style.setProperty('color', '#111827', 'important')
+      }
+      
+      if (passwordInput) {
+        passwordInput.style.color = '#111827'
+        passwordInput.style.backgroundColor = '#ffffff'
+        passwordInput.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
+        passwordInput.style.setProperty('color', '#111827', 'important')
+      }
+    }
+
+    forceTextColor()
+    // Also force on input events
+    const interval = setInterval(forceTextColor, 100)
+    
+    return () => clearInterval(interval)
+  }, [])
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
@@ -52,9 +80,20 @@ export default function LoginPage() {
               id="email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value)
+                const input = e.target as HTMLInputElement
+                input.style.color = '#111827'
+                input.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
+              }}
+              onInput={(e) => {
+                const input = e.target as HTMLInputElement
+                input.style.color = '#111827'
+                input.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
+              }}
+              autoComplete="off"
               required
-              style={{ color: '#111827', backgroundColor: '#ffffff' }}
+              style={{ color: '#111827 !important', backgroundColor: '#ffffff !important', WebkitTextFillColor: '#111827' } as any}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
@@ -66,9 +105,20 @@ export default function LoginPage() {
               id="password"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value)
+                const input = e.target as HTMLInputElement
+                input.style.color = '#111827'
+                input.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
+              }}
+              onInput={(e) => {
+                const input = e.target as HTMLInputElement
+                input.style.color = '#111827'
+                input.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
+              }}
+              autoComplete="new-password"
               required
-              style={{ color: '#111827', backgroundColor: '#ffffff' }}
+              style={{ color: '#111827 !important', backgroundColor: '#ffffff !important', WebkitTextFillColor: '#111827' } as any}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
