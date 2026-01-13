@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
@@ -10,81 +10,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-
-  useEffect(() => {
-    // Force text color after component mounts
-    const forceTextColor = () => {
-      const emailInput = document.getElementById('email') as HTMLInputElement
-      const passwordInput = document.getElementById('password') as HTMLInputElement
-      
-      const applyStyles = (input: HTMLInputElement) => {
-        input.style.setProperty('color', '#111827', 'important')
-        input.style.setProperty('background-color', '#ffffff', 'important')
-        input.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
-        input.style.setProperty('-ms-text-fill-color', '#111827', 'important')
-        input.style.setProperty('caret-color', '#111827', 'important')
-        input.style.setProperty('-webkit-box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
-        input.style.setProperty('box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
-        // Force computed style
-        const computed = window.getComputedStyle(input)
-        if (computed.color !== 'rgb(17, 24, 39)') {
-          input.setAttribute('style', input.getAttribute('style') + '; color: #111827 !important; -webkit-text-fill-color: #111827 !important;')
-        }
-      }
-      
-      if (emailInput) applyStyles(emailInput)
-      if (passwordInput) applyStyles(passwordInput)
-    }
-
-    forceTextColor()
-    
-    // Use MutationObserver to catch Edge style changes
-    const observer = new MutationObserver(() => {
-      forceTextColor()
-    })
-    
-    const emailInput = document.getElementById('email')
-    const passwordInput = document.getElementById('password')
-    
-    if (emailInput) {
-      observer.observe(emailInput, { attributes: true, attributeFilter: ['style', 'class'] })
-    }
-    if (passwordInput) {
-      observer.observe(passwordInput, { attributes: true, attributeFilter: ['style', 'class'] })
-    }
-    
-    // Also force on input events and frequently
-    const interval = setInterval(forceTextColor, 50)
-    
-    // Force on focus/blur
-    const forceOnFocus = () => {
-      setTimeout(forceTextColor, 0)
-      setTimeout(forceTextColor, 10)
-      setTimeout(forceTextColor, 50)
-    }
-    
-    if (emailInput) {
-      emailInput.addEventListener('focus', forceOnFocus)
-      emailInput.addEventListener('blur', forceTextColor)
-    }
-    if (passwordInput) {
-      passwordInput.addEventListener('focus', forceOnFocus)
-      passwordInput.addEventListener('blur', forceTextColor)
-    }
-    
-    return () => {
-      clearInterval(interval)
-      observer.disconnect()
-      if (emailInput) {
-        emailInput.removeEventListener('focus', forceOnFocus)
-        emailInput.removeEventListener('blur', forceTextColor)
-      }
-      if (passwordInput) {
-        passwordInput.removeEventListener('focus', forceOnFocus)
-        passwordInput.removeEventListener('blur', forceTextColor)
-      }
-    }
-  }, [])
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
@@ -105,55 +30,10 @@ export default function LoginPage() {
   }
 
   return (
-    <>
-      <style dangerouslySetInnerHTML={{__html: `
-        input#email, input#password {
-          color: #111827 !important;
-          background-color: #ffffff !important;
-          -webkit-text-fill-color: #111827 !important;
-          -ms-text-fill-color: #111827 !important;
-          caret-color: #111827 !important;
-        }
-        input#email::placeholder, input#password::placeholder {
-          color: #9ca3af !important;
-          -webkit-text-fill-color: #9ca3af !important;
-          -ms-text-fill-color: #9ca3af !important;
-          opacity: 1 !important;
-        }
-        /* Edge/Chrome autofill override - multiple attempts */
-        input#email:-webkit-autofill,
-        input#password:-webkit-autofill,
-        input#email:-webkit-autofill:hover,
-        input#password:-webkit-autofill:hover,
-        input#email:-webkit-autofill:focus,
-        input#password:-webkit-autofill:focus,
-        input#email:-webkit-autofill:active,
-        input#password:-webkit-autofill:active {
-          -webkit-text-fill-color: #111827 !important;
-          -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
-          box-shadow: 0 0 0px 1000px #ffffff inset !important;
-          background-color: #ffffff !important;
-          color: #111827 !important;
-        }
-        /* Edge specific */
-        input#email:-ms-input-placeholder,
-        input#password:-ms-input-placeholder {
-          color: #9ca3af !important;
-          opacity: 1 !important;
-        }
-        /* Force text color on all states */
-        input#email:focus, input#password:focus,
-        input#email:active, input#password:active,
-        input#email:hover, input#password:hover {
-          color: #111827 !important;
-          -webkit-text-fill-color: #111827 !important;
-          -ms-text-fill-color: #111827 !important;
-        }
-      `}} />
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-          <h1 className="text-2xl font-bold mb-6 text-center">Orbix Network Admin</h1>
-          <form onSubmit={handleLogin} className="space-y-4">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h1 className="text-2xl font-bold mb-6 text-center">Orbix Network Admin</h1>
+        <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email
@@ -162,24 +42,14 @@ export default function LoginPage() {
               id="email"
               type="email"
               value={email}
-              onChange={(e) => {
-                setEmail(e.target.value)
-                const input = e.target as HTMLInputElement
-                input.style.color = '#111827'
-                input.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
-                input.style.setProperty('-ms-text-fill-color', '#111827', 'important')
-                input.style.setProperty('-webkit-box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
-              }}
-              onInput={(e) => {
-                const input = e.target as HTMLInputElement
-                input.style.color = '#111827'
-                input.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
-                input.style.setProperty('-ms-text-fill-color', '#111827', 'important')
-                input.style.setProperty('-webkit-box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
-              }}
-              autoComplete="off"
+              onChange={(e) => setEmail(e.target.value)}
               required
-              style={{ color: '#111827 !important', backgroundColor: '#ffffff !important', WebkitTextFillColor: '#111827', msTextFillColor: '#111827', WebkitBoxShadow: '0 0 0px 1000px #ffffff inset' } as any}
+              autoComplete="off"
+              style={{
+                color: 'rgb(17, 24, 39)',
+                backgroundColor: 'rgb(255, 255, 255)',
+                WebkitTextFillColor: 'rgb(17, 24, 39)',
+              }}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
@@ -191,24 +61,14 @@ export default function LoginPage() {
               id="password"
               type="password"
               value={password}
-              onChange={(e) => {
-                setPassword(e.target.value)
-                const input = e.target as HTMLInputElement
-                input.style.color = '#111827'
-                input.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
-                input.style.setProperty('-ms-text-fill-color', '#111827', 'important')
-                input.style.setProperty('-webkit-box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
-              }}
-              onInput={(e) => {
-                const input = e.target as HTMLInputElement
-                input.style.color = '#111827'
-                input.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
-                input.style.setProperty('-ms-text-fill-color', '#111827', 'important')
-                input.style.setProperty('-webkit-box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
-              }}
-              autoComplete="new-password"
+              onChange={(e) => setPassword(e.target.value)}
               required
-              style={{ color: '#111827 !important', backgroundColor: '#ffffff !important', WebkitTextFillColor: '#111827', msTextFillColor: '#111827', WebkitBoxShadow: '0 0 0px 1000px #ffffff inset' } as any}
+              autoComplete="new-password"
+              style={{
+                color: 'rgb(17, 24, 39)',
+                backgroundColor: 'rgb(255, 255, 255)',
+                WebkitTextFillColor: 'rgb(17, 24, 39)',
+              }}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
@@ -222,10 +82,8 @@ export default function LoginPage() {
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
-          </form>
-        </div>
+        </form>
       </div>
-    </>
+    </div>
   )
 }
-

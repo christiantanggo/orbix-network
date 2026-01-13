@@ -17,6 +17,8 @@ export default function RootLayout({
   return (
     <html lang="en" style={{ colorScheme: 'light' }}>
       <head>
+        <meta name="color-scheme" content="light" />
+        <meta name="theme-color" content="#ffffff" />
         <style dangerouslySetInnerHTML={{__html: `
           * {
             color-scheme: light !important;
