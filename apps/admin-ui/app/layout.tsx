@@ -15,7 +15,30 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" style={{ colorScheme: 'light' }}>
+      <head>
+        <style dangerouslySetInnerHTML={{__html: `
+          * {
+            color-scheme: light !important;
+          }
+          input[type="email"],
+          input[type="password"],
+          input[type="text"],
+          input[type="number"],
+          textarea,
+          select {
+            color: #111827 !important;
+            background-color: #ffffff !important;
+            -webkit-text-fill-color: #111827 !important;
+          }
+          input[type="email"]::placeholder,
+          input[type="password"]::placeholder,
+          input[type="text"]::placeholder {
+            color: #9ca3af !important;
+            -webkit-text-fill-color: #9ca3af !important;
+          }
+        `}} />
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   )
