@@ -30,48 +30,71 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Orbix Network Admin</h1>
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              autoComplete="off"
-              style={{
-                color: 'rgb(17, 24, 39)',
-                backgroundColor: 'rgb(255, 255, 255)',
-                WebkitTextFillColor: 'rgb(17, 24, 39)',
-              }}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoComplete="new-password"
-              style={{
-                color: 'rgb(17, 24, 39)',
-                backgroundColor: 'rgb(255, 255, 255)',
-                WebkitTextFillColor: 'rgb(17, 24, 39)',
-              }}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </div>
+    <>
+      <style dangerouslySetInnerHTML={{__html: `
+        input[data-edge-fix] {
+          color: rgb(17, 24, 39) !important;
+          background-color: rgb(255, 255, 255) !important;
+          -webkit-text-fill-color: rgb(17, 24, 39) !important;
+          caret-color: rgb(17, 24, 39) !important;
+        }
+        input[data-edge-fix]:-webkit-autofill,
+        input[data-edge-fix]:-webkit-autofill:hover,
+        input[data-edge-fix]:-webkit-autofill:focus,
+        input[data-edge-fix]:-webkit-autofill:active {
+          -webkit-text-fill-color: rgb(17, 24, 39) !important;
+          -webkit-box-shadow: 0 0 0px 1000px rgb(255, 255, 255) inset !important;
+          box-shadow: 0 0 0px 1000px rgb(255, 255, 255) inset !important;
+          background-color: rgb(255, 255, 255) !important;
+          color: rgb(17, 24, 39) !important;
+        }
+      `}} />
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+          <h1 className="text-2xl font-bold mb-6 text-center">Orbix Network Admin</h1>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoComplete="off"
+                data-edge-fix="true"
+                style={{
+                  color: 'rgb(17, 24, 39)',
+                  backgroundColor: 'rgb(255, 255, 255)',
+                  WebkitTextFillColor: 'rgb(17, 24, 39)',
+                  caretColor: 'rgb(17, 24, 39)',
+                }}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="new-password"
+                data-edge-fix="true"
+                style={{
+                  color: 'rgb(17, 24, 39)',
+                  backgroundColor: 'rgb(255, 255, 255)',
+                  WebkitTextFillColor: 'rgb(17, 24, 39)',
+                  caretColor: 'rgb(17, 24, 39)',
+                }}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
           {error && (
             <div className="text-red-600 text-sm">{error}</div>
           )}
@@ -82,8 +105,9 @@ export default function LoginPage() {
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
