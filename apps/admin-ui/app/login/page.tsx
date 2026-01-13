@@ -17,34 +17,73 @@ export default function LoginPage() {
       const emailInput = document.getElementById('email') as HTMLInputElement
       const passwordInput = document.getElementById('password') as HTMLInputElement
       
-      if (emailInput) {
-        emailInput.style.color = '#111827'
-        emailInput.style.backgroundColor = '#ffffff'
-        emailInput.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
-        emailInput.style.setProperty('-ms-text-fill-color', '#111827', 'important')
-        emailInput.style.setProperty('color', '#111827', 'important')
-        // Edge autofill override
-        emailInput.style.setProperty('-webkit-box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
-        emailInput.style.setProperty('box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
+      const applyStyles = (input: HTMLInputElement) => {
+        input.style.setProperty('color', '#111827', 'important')
+        input.style.setProperty('background-color', '#ffffff', 'important')
+        input.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
+        input.style.setProperty('-ms-text-fill-color', '#111827', 'important')
+        input.style.setProperty('caret-color', '#111827', 'important')
+        input.style.setProperty('-webkit-box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
+        input.style.setProperty('box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
+        // Force computed style
+        const computed = window.getComputedStyle(input)
+        if (computed.color !== 'rgb(17, 24, 39)') {
+          input.setAttribute('style', input.getAttribute('style') + '; color: #111827 !important; -webkit-text-fill-color: #111827 !important;')
+        }
       }
       
-      if (passwordInput) {
-        passwordInput.style.color = '#111827'
-        passwordInput.style.backgroundColor = '#ffffff'
-        passwordInput.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
-        passwordInput.style.setProperty('-ms-text-fill-color', '#111827', 'important')
-        passwordInput.style.setProperty('color', '#111827', 'important')
-        // Edge autofill override
-        passwordInput.style.setProperty('-webkit-box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
-        passwordInput.style.setProperty('box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
-      }
+      if (emailInput) applyStyles(emailInput)
+      if (passwordInput) applyStyles(passwordInput)
     }
 
     forceTextColor()
-    // Also force on input events
-    const interval = setInterval(forceTextColor, 100)
     
-    return () => clearInterval(interval)
+    // Use MutationObserver to catch Edge style changes
+    const observer = new MutationObserver(() => {
+      forceTextColor()
+    })
+    
+    const emailInput = document.getElementById('email')
+    const passwordInput = document.getElementById('password')
+    
+    if (emailInput) {
+      observer.observe(emailInput, { attributes: true, attributeFilter: ['style', 'class'] })
+    }
+    if (passwordInput) {
+      observer.observe(passwordInput, { attributes: true, attributeFilter: ['style', 'class'] })
+    }
+    
+    // Also force on input events and frequently
+    const interval = setInterval(forceTextColor, 50)
+    
+    // Force on focus/blur
+    const forceOnFocus = () => {
+      setTimeout(forceTextColor, 0)
+      setTimeout(forceTextColor, 10)
+      setTimeout(forceTextColor, 50)
+    }
+    
+    if (emailInput) {
+      emailInput.addEventListener('focus', forceOnFocus)
+      emailInput.addEventListener('blur', forceTextColor)
+    }
+    if (passwordInput) {
+      passwordInput.addEventListener('focus', forceOnFocus)
+      passwordInput.addEventListener('blur', forceTextColor)
+    }
+    
+    return () => {
+      clearInterval(interval)
+      observer.disconnect()
+      if (emailInput) {
+        emailInput.removeEventListener('focus', forceOnFocus)
+        emailInput.removeEventListener('blur', forceTextColor)
+      }
+      if (passwordInput) {
+        passwordInput.removeEventListener('focus', forceOnFocus)
+        passwordInput.removeEventListener('blur', forceTextColor)
+      }
+    }
   }, [])
 
   async function handleLogin(e: React.FormEvent) {
@@ -68,27 +107,47 @@ export default function LoginPage() {
   return (
     <>
       <style dangerouslySetInnerHTML={{__html: `
-        #email, #password {
+        input#email, input#password {
           color: #111827 !important;
           background-color: #ffffff !important;
           -webkit-text-fill-color: #111827 !important;
           -ms-text-fill-color: #111827 !important;
+          caret-color: #111827 !important;
         }
-        #email::placeholder, #password::placeholder {
+        input#email::placeholder, input#password::placeholder {
           color: #9ca3af !important;
           -webkit-text-fill-color: #9ca3af !important;
           -ms-text-fill-color: #9ca3af !important;
+          opacity: 1 !important;
         }
-        /* Edge autofill override */
-        #email:-webkit-autofill,
-        #password:-webkit-autofill {
+        /* Edge/Chrome autofill override - multiple attempts */
+        input#email:-webkit-autofill,
+        input#password:-webkit-autofill,
+        input#email:-webkit-autofill:hover,
+        input#password:-webkit-autofill:hover,
+        input#email:-webkit-autofill:focus,
+        input#password:-webkit-autofill:focus,
+        input#email:-webkit-autofill:active,
+        input#password:-webkit-autofill:active {
           -webkit-text-fill-color: #111827 !important;
           -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
           box-shadow: 0 0 0px 1000px #ffffff inset !important;
+          background-color: #ffffff !important;
+          color: #111827 !important;
         }
-        #email:-ms-input-placeholder,
-        #password:-ms-input-placeholder {
+        /* Edge specific */
+        input#email:-ms-input-placeholder,
+        input#password:-ms-input-placeholder {
           color: #9ca3af !important;
+          opacity: 1 !important;
+        }
+        /* Force text color on all states */
+        input#email:focus, input#password:focus,
+        input#email:active, input#password:active,
+        input#email:hover, input#password:hover {
+          color: #111827 !important;
+          -webkit-text-fill-color: #111827 !important;
+          -ms-text-fill-color: #111827 !important;
         }
       `}} />
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
