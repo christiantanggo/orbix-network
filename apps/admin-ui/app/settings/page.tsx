@@ -94,9 +94,12 @@ export default function SettingsPage() {
             </label>
             <input
               type="number"
+              name="auto_approve_minutes"
               value={settings.auto_approve_minutes?.value || 60}
               onChange={(e) => updateSetting('auto_approve_minutes', { value: parseInt(e.target.value) })}
+              onInput={(e) => updateSetting('auto_approve_minutes', { value: parseInt((e.target as HTMLInputElement).value) || 60 })}
               onBlur={() => saveSetting('auto_approve_minutes', settings.auto_approve_minutes)}
+              data-testid="auto-approve-minutes-input"
               className="px-3 py-2 border border-gray-300 rounded-md w-32"
             />
             <p className="text-sm text-gray-500 mt-1">Minutes before auto-approving pending reviews</p>
@@ -108,9 +111,12 @@ export default function SettingsPage() {
             </label>
             <input
               type="number"
+              name="shock_score_threshold"
               value={settings.shock_score_threshold?.value || 65}
               onChange={(e) => updateSetting('shock_score_threshold', { value: parseInt(e.target.value) })}
+              onInput={(e) => updateSetting('shock_score_threshold', { value: parseInt((e.target as HTMLInputElement).value) || 65 })}
               onBlur={() => saveSetting('shock_score_threshold', settings.shock_score_threshold)}
+              data-testid="shock-score-threshold-input"
               className="px-3 py-2 border border-gray-300 rounded-md w-32"
             />
             <p className="text-sm text-gray-500 mt-1">Minimum shock score (0-100) to process a story</p>
@@ -122,9 +128,12 @@ export default function SettingsPage() {
             </label>
             <input
               type="number"
+              name="daily_video_cap"
               value={settings.daily_video_cap?.value || 10}
               onChange={(e) => updateSetting('daily_video_cap', { value: parseInt(e.target.value) })}
+              onInput={(e) => updateSetting('daily_video_cap', { value: parseInt((e.target as HTMLInputElement).value) || 10 })}
               onBlur={() => saveSetting('daily_video_cap', settings.daily_video_cap)}
+              data-testid="daily-video-cap-input"
               className="px-3 py-2 border border-gray-300 rounded-md w-32"
             />
             <p className="text-sm text-gray-500 mt-1">Maximum videos to publish per day</p>

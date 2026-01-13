@@ -136,10 +136,12 @@ export default function ReviewPage() {
                         <div className="mt-1 flex space-x-2">
                           <input
                             type="text"
+                            name="editedHook"
                             value={editedHook}
                             onChange={(e) => setEditedHook(e.target.value)}
+                            onInput={(e) => setEditedHook((e.target as HTMLInputElement).value)}
                             className="flex-1 px-3 py-2 border border-gray-300 rounded-md"
-                            defaultValue={script?.hook}
+                            data-testid="hook-edit-input"
                           />
                           <button
                             onClick={() => saveEditedHook(item.id)}
