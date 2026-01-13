@@ -30,10 +30,20 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Orbix Network Admin</h1>
-        <form onSubmit={handleLogin} className="space-y-4">
+    <>
+      <style dangerouslySetInnerHTML={{__html: `
+        #email, #password {
+          color: #111827 !important;
+          background-color: #ffffff !important;
+        }
+        #email::placeholder, #password::placeholder {
+          color: #9ca3af !important;
+        }
+      `}} />
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+          <h1 className="text-2xl font-bold mb-6 text-center">Orbix Network Admin</h1>
+          <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email
@@ -72,9 +82,10 @@ export default function LoginPage() {
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
