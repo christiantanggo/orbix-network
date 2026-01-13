@@ -21,14 +21,22 @@ export default function LoginPage() {
         emailInput.style.color = '#111827'
         emailInput.style.backgroundColor = '#ffffff'
         emailInput.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
+        emailInput.style.setProperty('-ms-text-fill-color', '#111827', 'important')
         emailInput.style.setProperty('color', '#111827', 'important')
+        // Edge autofill override
+        emailInput.style.setProperty('-webkit-box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
+        emailInput.style.setProperty('box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
       }
       
       if (passwordInput) {
         passwordInput.style.color = '#111827'
         passwordInput.style.backgroundColor = '#ffffff'
         passwordInput.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
+        passwordInput.style.setProperty('-ms-text-fill-color', '#111827', 'important')
         passwordInput.style.setProperty('color', '#111827', 'important')
+        // Edge autofill override
+        passwordInput.style.setProperty('-webkit-box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
+        passwordInput.style.setProperty('box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
       }
     }
 
@@ -63,8 +71,23 @@ export default function LoginPage() {
         #email, #password {
           color: #111827 !important;
           background-color: #ffffff !important;
+          -webkit-text-fill-color: #111827 !important;
+          -ms-text-fill-color: #111827 !important;
         }
         #email::placeholder, #password::placeholder {
+          color: #9ca3af !important;
+          -webkit-text-fill-color: #9ca3af !important;
+          -ms-text-fill-color: #9ca3af !important;
+        }
+        /* Edge autofill override */
+        #email:-webkit-autofill,
+        #password:-webkit-autofill {
+          -webkit-text-fill-color: #111827 !important;
+          -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+          box-shadow: 0 0 0px 1000px #ffffff inset !important;
+        }
+        #email:-ms-input-placeholder,
+        #password:-ms-input-placeholder {
           color: #9ca3af !important;
         }
       `}} />
@@ -85,15 +108,19 @@ export default function LoginPage() {
                 const input = e.target as HTMLInputElement
                 input.style.color = '#111827'
                 input.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
+                input.style.setProperty('-ms-text-fill-color', '#111827', 'important')
+                input.style.setProperty('-webkit-box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
               }}
               onInput={(e) => {
                 const input = e.target as HTMLInputElement
                 input.style.color = '#111827'
                 input.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
+                input.style.setProperty('-ms-text-fill-color', '#111827', 'important')
+                input.style.setProperty('-webkit-box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
               }}
               autoComplete="off"
               required
-              style={{ color: '#111827 !important', backgroundColor: '#ffffff !important', WebkitTextFillColor: '#111827' } as any}
+              style={{ color: '#111827 !important', backgroundColor: '#ffffff !important', WebkitTextFillColor: '#111827', msTextFillColor: '#111827', WebkitBoxShadow: '0 0 0px 1000px #ffffff inset' } as any}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
@@ -110,15 +137,19 @@ export default function LoginPage() {
                 const input = e.target as HTMLInputElement
                 input.style.color = '#111827'
                 input.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
+                input.style.setProperty('-ms-text-fill-color', '#111827', 'important')
+                input.style.setProperty('-webkit-box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
               }}
               onInput={(e) => {
                 const input = e.target as HTMLInputElement
                 input.style.color = '#111827'
                 input.style.setProperty('-webkit-text-fill-color', '#111827', 'important')
+                input.style.setProperty('-ms-text-fill-color', '#111827', 'important')
+                input.style.setProperty('-webkit-box-shadow', '0 0 0px 1000px #ffffff inset', 'important')
               }}
               autoComplete="new-password"
               required
-              style={{ color: '#111827 !important', backgroundColor: '#ffffff !important', WebkitTextFillColor: '#111827' } as any}
+              style={{ color: '#111827 !important', backgroundColor: '#ffffff !important', WebkitTextFillColor: '#111827', msTextFillColor: '#111827', WebkitBoxShadow: '0 0 0px 1000px #ffffff inset' } as any}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
