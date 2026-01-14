@@ -8,14 +8,19 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.error('Missing Supabase environment variables:', {
     hasUrl: !!supabaseUrl,
     hasKey: !!supabaseAnonKey,
+    urlLength: supabaseUrl.length,
+    keyLength: supabaseAnonKey.length,
   })
 }
+
+// Don't throw - just log. Missing env vars will cause errors at runtime which is better for debugging.
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
+    flowType: 'pkce',
   },
 })
 

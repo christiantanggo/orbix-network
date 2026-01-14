@@ -37,43 +37,36 @@ export default function LoginPage() {
     setLoading(true)
     setError('')
 
-    // Check if Supabase is configured
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-    if (!supabaseUrl || !supabaseKey) {
-      setError('Supabase is not configured. Please check environment variables.')
-      setLoading(false)
-      return
-    }
-
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+        email: email.trim(),
+        password: password,
       })
 
       if (error) {
+        console.error('Supabase auth error:', error)
         // Provide more helpful error messages
-        if (error.message.includes('Invalid login credentials')) {
+        if (error.message.includes('Invalid login credentials') || error.status === 400) {
           setError('Invalid email or password. Please check your credentials.')
         } else if (error.message.includes('Email not confirmed')) {
           setError('Please confirm your email before logging in.')
         } else if (error.message.includes('Too many requests')) {
           setError('Too many login attempts. Please try again later.')
+        } else if (error.status === 500) {
+          setError('Server error. Please check your Supabase project status and try again.')
         } else {
-          setError(error.message || 'An error occurred during login. Please check your Supabase configuration.')
+          setError(error.message || `Login failed (${error.status || 'unknown error'}). Please check your credentials.`)
         }
         setLoading(false)
       } else if (data?.user) {
         router.push('/dashboard')
       } else {
-        setError('Login failed. Please try again.')
+        setError('Login failed. No user data returned.')
         setLoading(false)
       }
     } catch (err: any) {
       console.error('Login error:', err)
-      setError(err.message || 'An unexpected error occurred. Please check your network connection and Supabase configuration.')
+      setError(err.message || 'An unexpected error occurred. Please check your network connection.')
       setLoading(false)
     }
   }
